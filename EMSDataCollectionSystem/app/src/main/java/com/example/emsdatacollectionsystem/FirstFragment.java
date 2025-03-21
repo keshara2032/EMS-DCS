@@ -55,7 +55,7 @@ public class FirstFragment extends Fragment {
         binding.buttonFirst.setText("Start Recording");
 
         requireActivity().runOnUiThread(() -> binding.statusText.setText("Ready for Recording"));
-        requireActivity().runOnUiThread(() -> binding.dataStatus.setText("No data yet..."));
+        requireActivity().runOnUiThread(() -> binding.dataStatus.setText("No data..."));
 
 
         binding.buttonFirst.setOnClickListener(v -> {
