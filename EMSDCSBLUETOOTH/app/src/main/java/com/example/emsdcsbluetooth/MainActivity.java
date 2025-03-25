@@ -44,6 +44,8 @@ public class MainActivity extends Activity {
 
     private static final int REQUEST_CODE_BT_PERMISSIONS = 100;
     private TextView statusView;
+    private TextView countView;
+
 
     @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
@@ -52,17 +54,23 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         statusView = findViewById(R.id.statusView);
+        countView = findViewById(R.id.countView);
+
         statusView.setText("Waiting to start...");
 
         // Optional: Keep screen on for testing
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         registerReceiver(statusReceiver, new IntentFilter("com.example.emsdcsbluetooth.STATUS_UPDATE"));
+        registerReceiver(statusReceiver, new IntentFilter("com.example.emsdcsbluetooth.COUNT_UPDATE"));
+
 
         if (!hasBluetoothPermissions()) {
             requestPermissions(new String[]{
                     Manifest.permission.BLUETOOTH_CONNECT,
                     Manifest.permission.BLUETOOTH_ADVERTISE,
+                    Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.BODY_SENSORS
             }, REQUEST_CODE_BT_PERMISSIONS);
         } else {
@@ -84,6 +92,10 @@ public class MainActivity extends Activity {
                 String msg = intent.getStringExtra("status");
                 statusView.setText(msg);
             }
+            if ("com.example.emsdcsbluetooth.COUNT_UPDATE".equals(intent.getAction())) {
+                int msg = intent.getIntExtra("count",0);
+                countView.setText(String.valueOf(msg));
+            }
         }
     };
 
@@ -92,6 +104,8 @@ public class MainActivity extends Activity {
     private boolean hasBluetoothPermissions() {
         return checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED &&
                 checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 checkSelfPermission(Manifest.permission.BODY_SENSORS) == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -105,14 +119,17 @@ public class MainActivity extends Activity {
         }
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE_BT_PERMISSIONS) {
-            boolean allGranted = true;
+            boolean allGranted = false;
+            Log.d("MainActivity", "Permission result: " + grantResults.length);
             for (int result : grantResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    allGranted = false;
+                Log.d("MainActivity", "Permission result: " + result);
+                if (result == PackageManager.PERMISSION_GRANTED) {
+                    allGranted = true;
                     break;
                 }
             }

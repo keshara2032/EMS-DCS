@@ -41,6 +41,8 @@ public class SensorService extends Service implements SensorEventListener {
 
     private PowerManager.WakeLock wakeLock;
 
+    private static int COUNTER = 0;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -58,6 +60,12 @@ public class SensorService extends Service implements SensorEventListener {
     private void sendStatus(String status) {
         Intent intent = new Intent("com.example.emsdcsbluetooth.STATUS_UPDATE");
         intent.putExtra("status", status);
+        sendBroadcast(intent);
+    }
+
+    private void updateCount(int count) {
+        Intent intent = new Intent("com.example.emsdcsbluetooth.COUNT_UPDATE");
+        intent.putExtra("count", count);
         sendBroadcast(intent);
     }
 
@@ -84,7 +92,8 @@ public class SensorService extends Service implements SensorEventListener {
                     outputStream = socket.getOutputStream();
                     isConnected = true;
 
-                    sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+                    COUNTER = 0;
+                    sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
                     sendStatus("Sending data...");
 
 
@@ -122,12 +131,15 @@ public class SensorService extends Service implements SensorEventListener {
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
-            String message = timestamp + "," + x + "," + y + "," + z + "\n";
+            COUNTER++;
+
+            String message = COUNTER + "," + timestamp + "," + x + "," + y + "," + z + "\n";
 
             try {
                 outputStream.write(message.getBytes());
                 outputStream.flush();
                 Log.d(TAG, "Sent: " + message.trim());
+                updateCount(COUNTER);
             } catch (IOException e) {
                 Log.e(TAG, "Send failed", e);
                 isConnected = false;
