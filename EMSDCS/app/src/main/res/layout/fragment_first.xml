@@ -77,6 +77,19 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/darker_gray"
                 android:gravity="center" />
+
+            <TextView
+                android:id="@+id/epoch_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="199999999999"
+                android:textSize="36sp"
+                android:paddingTop="20dp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="@android:color/black"
+                android:gravity="center" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

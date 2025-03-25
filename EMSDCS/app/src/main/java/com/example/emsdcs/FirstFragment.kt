@@ -34,7 +34,10 @@ class FirstFragment : Fragment() {
     private var fileWriter: BufferedWriter? = null
 
     private val REQUEST_BLUETOOTH_PERMISSIONS = 1
-    private val SMARTWATCH_MAC = "28:3D:C2:EA:54:81"
+    private val SMARTWATCH_01_MAC = "28:3D:C2:EA:54:81"
+    private val SMARTWATCH_02_MAC = "04:29:2E:DE:DD:AF"
+    private val SMARTWATCH_03_MAC = "B0:4A:6A:49:5A:61"
+
     private val MY_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
     override fun onCreateView(
@@ -109,7 +112,7 @@ class FirstFragment : Fragment() {
                     return@thread
                 }
 
-                val device: BluetoothDevice = adapter.getRemoteDevice(SMARTWATCH_MAC)
+                val device: BluetoothDevice = adapter.getRemoteDevice(SMARTWATCH_01_MAC)
                 if (ActivityCompat.checkSelfPermission(
                         requireContext(),
                         Manifest.permission.BLUETOOTH_CONNECT
@@ -133,13 +136,16 @@ class FirstFragment : Fragment() {
                     line = reader?.readLine() ?: break
                     Log.d("AccelData", line)
 
-                    fileWriter?.write(line)
+                    val currentTime = System.currentTimeMillis()
+                    val timestampedLine = "${currentTime},$line"
+                    fileWriter?.write(timestampedLine)
                     fileWriter?.newLine()
                     fileWriter?.flush()
 
                     if (isRecording)
                     requireActivity().runOnUiThread {
                         binding.dataStatus.text = "Smartwatch data: $line"
+                        binding.epochTimestamp.text = "$currentTime"
                     }
                 }
 
