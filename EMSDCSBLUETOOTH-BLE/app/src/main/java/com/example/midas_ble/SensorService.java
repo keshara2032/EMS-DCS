@@ -1,4 +1,4 @@
-package com.example.emsdcsbluetooth;
+package com.example.midas_ble;
 
 import android.Manifest;
 import android.app.Notification;

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.emsdcsbluetooth'
+    namespace 'com.example.midas_ble'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.emsdcsbluetooth"
+        applicationId 'com.example.midas_ble'
         minSdk 30
         targetSdk 32
         versionCode 1

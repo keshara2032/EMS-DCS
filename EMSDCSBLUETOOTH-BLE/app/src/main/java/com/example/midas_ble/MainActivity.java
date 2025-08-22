@@ -1,4 +1,4 @@
-package com.example.emsdcsbluetooth;
+package com.example.midas_ble;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -8,37 +8,17 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.UUID;
 
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 public class MainActivity extends Activity {
 
